@@ -1,0 +1,84 @@
+name: CI/CD Pipeline
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # 1. Code auschecken
+    - name: Checkout Code
+      uses: actions/checkout@v4
+    
+    # 2. Java Setup
+    - name: Setup JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+    
+    # 3. Cache Dependencies
+    - name: Cache Maven packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    
+    # 4. Build durchführen
+    - name: Build with Maven
+      run: mvn clean package -DskipTests
+    
+    # 5. Tests ausführen (mit Headless-Konfiguration)
+    - name: Run Tests
+      run: mvn test
+      env:
+        JAVA_TOOL_OPTIONS: -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw
+    
+    # 6. Test-Report hochladen (bei Fehler)
+    - name: Upload Test Results
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: target/surefire-reports/
+    
+    # 7. Code Coverage
+    - name: Generate Coverage Report
+      run: mvn jacoco:report
+    
+    # 8. Quality Gate - Coverage Check
+    - name: Quality Gate - Coverage Check
+      run: |
+        # JaCoCo CSV-Report parsen (zuverlässiger als HTML)
+        if [ -f target/site/jacoco/jacoco.csv ]; then
+          COVERAGE=$(awk -F',' 'NR>1 {missed+=$4; covered+=$5} END {if(missed+covered>0) printf "%.0f", (covered/(missed+covered))*100; else print "0"}' target/site/jacoco/jacoco.csv)
+          echo "Code Coverage: $COVERAGE%"
+          if [ "$COVERAGE" -lt 50 ]; then
+            echo "❌ Coverage unter 50% - Build fehlgeschlagen!"
+            exit 1
+          fi
+          echo "✅ Coverage OK: $COVERAGE%"
+        else
+          echo "⚠️  Kein JaCoCo-Report gefunden!"
+          exit 1
+        fi
+    
+    # 9. Coverage Report hochladen
+    - name: Upload Coverage Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: target/site/jacoco/
+    
+    # 10. Artefakt speichern
+    - name: Upload JAR
+      uses: actions/upload-artifact@v4
+      with:
+        name: application-jar
+        path: target/*.jar
+          
