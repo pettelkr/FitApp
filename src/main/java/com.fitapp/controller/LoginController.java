@@ -1,11 +1,7 @@
 package com.fitapp.controller;
+import com.fitapp.model.*;
 import com.fitapp.navigation.Navigator;
 
-import com.fitapp.model.EmptyFieldException;
-import com.fitapp.model.InvalidCredentialsException;
-
-import com.fitapp.model.UserDatabaseSQLite;
-import com.fitapp.model.UserRepository;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -66,7 +62,12 @@ public class LoginController implements Controller {
     @FXML
     public void handleLogin(ActionEvent event) {
         try {
-            userDB.validateInput(usernameField.getText(), passwordField.getText());
+            String username = usernameField.getText();
+
+            userDB.validateInput(username, passwordField.getText());
+
+            Session.login(((UserDatabaseSQLite) userDB).findIdByUsername(username), username);
+
             errorLabel.setVisible(false);
             changeView("mainMenu.fxml");
 
@@ -97,8 +98,12 @@ public class LoginController implements Controller {
             return;
         }
 
-        ((UserDatabaseSQLite) userDB).addUser(username, password);
-        showLogin();
+        if (((UserDatabaseSQLite) userDB).addUser(username, password)) {
+            showLogin();
+        } else {
+            regErrorLabel.setText("Benutzername ist schon vergeben!");
+            regErrorLabel.setVisible(true);
+        }
     }
 
 }

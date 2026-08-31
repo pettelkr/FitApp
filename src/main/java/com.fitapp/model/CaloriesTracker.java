@@ -1,5 +1,6 @@
 package com.fitapp.model;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -29,6 +30,12 @@ public class CaloriesTracker {
     private final IntegerProperty consumed = new SimpleIntegerProperty(0);
     private final IntegerProperty dailyLimit;
 
+    /**
+     * Durch Sport verbrannte Kalorien. Sie vergrössern das Tagesbudget,
+     * deshalb stehen sie in der Rechnung mit einem Plus.
+     */
+    private final IntegerProperty burned = new SimpleIntegerProperty(0);
+
     // constructor
     public CaloriesTracker(int dailyLimit) {
         this.dailyLimit = new SimpleIntegerProperty(dailyLimit);
@@ -41,13 +48,27 @@ public class CaloriesTracker {
         return dailyLimit;
     }
     public IntegerProperty getConsumed(){return consumed;}
+    public IntegerProperty getBurned() {
+        return burned;
+    }
+    /**
+     * Setzt die heute verbrannten Kalorien, normalerweise aus der Datenbank.
+     *
+     * @param calories darf nicht negativ sein
+     */
+    public void setBurned(int calories) {
+        if (calories < 0) {
+            throw new NegativeCaloriesException();
+        }
+        burned.set(calories);
+    }
 
     // methods
     public void addCalories(int calories) {
         if (calories < 0) {
             throw new NegativeCaloriesException();
         }
-        if (consumed.get() + calories > dailyLimit.get()) {
+        if (consumed.get() + calories > dailyLimit.get() + burned.get()) {
             throw new CalorieLimitExceededException();
         }
         consumed.set(consumed.get() + calories);
@@ -58,6 +79,9 @@ public class CaloriesTracker {
     }
 
     public IntegerBinding remainingCaloriesProperty() {
-        return (IntegerBinding) dailyLimit.subtract(consumed);
+        return Bindings.createIntegerBinding(
+                () -> dailyLimit.get() - consumed.get() + burned.get(),
+                dailyLimit, consumed, burned
+        );
     }
 }
