@@ -5,94 +5,144 @@ import java.util.List;
 
 public class PlanDay {
 
-    // attributes
-    private String dayName;
-    private List<Exercise> exercises;
+    // -------------------------
+    // ATTRIBUTES
+    // -------------------------
 
-    // constructor
+    private String dayName;
+
+    private List<PlanExercise> exercises;
+
+
+    // -------------------------
+    // CONSTRUCTOR
+    // -------------------------
+
     public PlanDay(String dayName) {
+
         this.dayName = dayName;
         this.exercises = new ArrayList<>();
     }
 
-    // getter
+
+    // -------------------------
+    // GETTERS
+    // -------------------------
+
     public String getDayName() {
         return dayName;
     }
 
-    public List<Exercise> getExercises() {
+    public List<PlanExercise> getExercises() {
         return exercises;
     }
 
+
     // -------------------------
-    // core methods
+    // ADD EXERCISE
     // -------------------------
 
-    public void addExercise(Exercise exercise) {
+    public void addExercise(PlanExercise exercise) {
+
         if (exercise != null) {
             exercises.add(exercise);
         }
     }
 
+
+    // -------------------------
+    // REMOVE EXERCISE
+    // -------------------------
+
     public void removeExercise(int exerciseId) {
-        exercises.removeIf(ex -> ex.getId() == exerciseId);
+
+        exercises.removeIf(
+                planExercise ->
+                        planExercise.getExercise().getId() == exerciseId
+        );
     }
 
-    public Exercise getExerciseById(int id) {
-        for (Exercise ex : exercises) {
-            if (ex.getId() == id) {
-                return ex;
+
+    // -------------------------
+    // GET EXERCISE
+    // -------------------------
+
+    public PlanExercise getExerciseById(int id) {
+
+        for (PlanExercise planExercise : exercises) {
+
+            if (planExercise.getExercise().getId() == id) {
+                return planExercise;
             }
         }
+
         return null;
     }
 
+
     // -------------------------
-    // calculations
+    // CALCULATIONS
     // -------------------------
 
     public double getTotalCalories() {
+
         double total = 0;
 
-        for (Exercise ex : exercises) {
-            total += ex.calcCalories();
+        for (PlanExercise exercise : exercises) {
+
+            total += exercise.getCalories();
         }
 
         return total;
     }
+
 
     public double getTotalDuration() {
+
         double total = 0;
 
-        for (Exercise ex : exercises) {
-            total += ex.getDuration();
+        for (PlanExercise exercise : exercises) {
+
+            total += exercise.getDuration();
         }
 
         return total;
     }
 
+
+    // -------------------------
+    // NUMBER OF EXERCISES
+    // -------------------------
+
     public int getNumberOfExercises() {
+
         return exercises.size();
     }
 
+
     // -------------------------
-    // utility
+    // UTILITY
     // -------------------------
 
     public boolean isEmpty() {
+
         return exercises.isEmpty();
     }
 
+
     public void clearExercises() {
+
         exercises.clear();
     }
 
+
     // -------------------------
-    // FIX: UI DISPLAY
+    // DISPLAY
     // -------------------------
 
     @Override
     public String toString() {
+
         return dayName;
     }
 }

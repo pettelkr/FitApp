@@ -39,8 +39,8 @@
 
         <Button text="Add Exercise"
                 maxWidth="Infinity"
-                style="-fx-font-size: 14px;"/>
-        <!--                onAction="#handleAddExercise" />-->
+                style="-fx-font-size: 14px;"
+                onAction="#handleAddExercise" />
 
         <Button text="Make Plan"
                 maxWidth="Infinity"

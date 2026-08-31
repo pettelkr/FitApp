@@ -24,9 +24,9 @@ public class MainMenuController implements Controller {
     }
 
     @FXML
-    public void handleAddExercise() {
-        System.out.println("Add Exercise clicked");
+    public void handleAddExercise() { changeView("addExercise.fxml");
     }
+
 
     @FXML
     public void handleMakePlan() {changeView("makeplan.fxml");

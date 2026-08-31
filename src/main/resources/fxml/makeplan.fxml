@@ -5,87 +5,221 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-
-
 <StackPane xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.fitapp.controller.PlanController"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.fitapp.controller.PlanController">
 
-      alignment="CENTER">
+    <!-- ========================= -->
+    <!-- BACKGROUND                 -->
+    <!-- ========================= -->
 
-    <!-- Background image -->
-    <ImageView fitWidth="800"
+    <ImageView fitWidth="1000"
                fitHeight="800"
                preserveRatio="false"
                opacity="0.9">
         <image>
-            <Image url="@/images/trainingsplan_gross.png" />
+            <Image url="@/images/trainingsplan_gross.png"/>
         </image>
     </ImageView>
 
-    <VBox spacing="15"
+
+    <!-- ========================= -->
+    <!-- MAIN CONTENT               -->
+    <!-- ========================= -->
+
+    <HBox spacing="20"
           alignment="CENTER"
-          maxWidth="320"
-          style="-fx-background-color: rgba(255,255,255,0.85);
-                 -fx-background-radius: 12;
-                 -fx-padding: 25;">
+          style="-fx-padding: 25;">
 
-    <Label text="Create Training Plan"
-           style="-fx-font-size: 18px; -fx-font-weight: bold;" />
 
-    <!-- Plan name -->
-    <TextField fx:id="planNameField"
-               promptText="Plan name" />
+        <!-- ================================================= -->
+        <!-- LEFT SIDE - PLAN CREATION                         -->
+        <!-- ================================================= -->
 
-    <!-- Start / End -->
-    <DatePicker fx:id="startDatePicker" promptText="Start date"/>
-    <DatePicker fx:id="endDatePicker" promptText="End date"/>
+        <VBox spacing="12"
+              alignment="CENTER"
+              prefWidth="320"
+              maxWidth="320"
+              style="-fx-background-color: rgba(255,255,255,0.90);
+                     -fx-background-radius: 12;
+                     -fx-padding: 25;">
 
-    <Button text="Create Plan"
-            onAction="#handleCreatePlan"
-            maxWidth="200"/>
+            <Label text="Create Training Plan"
+                   style="-fx-font-size: 18px;
+                          -fx-font-weight: bold;"/>
 
-    <Separator/>
 
-    <!-- Add Day -->
-        <ComboBox fx:id="dayField"
-                  promptText="Select Day"/>
+            <!-- ========================= -->
+            <!-- PLAN                       -->
+            <!-- ========================= -->
 
-    <Button text="Add Day"
-            onAction="#handleAddDay"
-            maxWidth="200"/>
+            <TextField fx:id="planNameField"
+                       promptText="Plan name"
+                       maxWidth="Infinity"/>
 
-    <Separator/>
+            <DatePicker fx:id="startDatePicker"
+                        promptText="Start date"
+                        maxWidth="Infinity"/>
 
-    <!-- Exercise selection -->
-    <ComboBox fx:id="daySelector"
-              promptText="Select Day"/>
+            <DatePicker fx:id="endDatePicker"
+                        promptText="End date"
+                        maxWidth="Infinity"/>
 
-    <ComboBox fx:id="exerciseTypeBox"
-              promptText="Exercise Type"/>
+            <Button text="Create Plan"
+                    onAction="#handleCreatePlan"
+                    maxWidth="200"/>
 
-    <ComboBox fx:id="exerciseBox"
-              promptText="Exercise"/>
 
-    <!-- Inputs -->
-    <TextField fx:id="durationField"
-               promptText="Duration (min)" />
+            <Separator/>
 
-    <TextField fx:id="setsField"
-               promptText="Sets (optional)" />
 
-    <TextField fx:id="repsField"
-               promptText="Reps (optional)" />
+            <!-- ========================= -->
+            <!-- ADD DAY                    -->
+            <!-- ========================= -->
 
-    <Button text="Add Exercise to Day"
-            onAction="#handleAddExercise"
-            maxWidth="250"/>
+            <Label text="Add Day"
+                   style="-fx-font-weight: bold;"/>
 
-    <Separator/>
+            <ComboBox fx:id="dayField"
+                      promptText="Select Day"
+                      maxWidth="Infinity"/>
 
-    <Button text="Back to Menu"
-            onAction="#handleBackToMenu"/>
+            <Button text="Add Day"
+                    onAction="#handleAddDay"
+                    maxWidth="200"/>
 
-     </VBox>
+
+            <Separator/>
+
+
+            <!-- ========================= -->
+            <!-- ADD EXERCISE               -->
+            <!-- ========================= -->
+
+            <Label text="Add Exercise"
+                   style="-fx-font-weight: bold;"/>
+
+
+            <ComboBox fx:id="daySelector"
+                      promptText="Select Day"
+                      maxWidth="Infinity"/>
+
+
+            <ComboBox fx:id="exerciseTypeBox"
+                      promptText="Exercise Type"
+                      onAction="#handleTypeSelect"
+                      maxWidth="Infinity"/>
+
+
+            <ComboBox fx:id="exerciseBox"
+                      promptText="Exercise"
+                      maxWidth="Infinity"/>
+
+
+            <TextField fx:id="durationField"
+                       promptText="Duration (min)"
+                       maxWidth="Infinity"/>
+
+
+            <TextField fx:id="setsField"
+                       promptText="Sets (optional)"
+                       maxWidth="Infinity"/>
+
+
+            <TextField fx:id="repsField"
+                       promptText="Reps (optional)"
+                       maxWidth="Infinity"/>
+
+
+            <Button text="Add Exercise to Day"
+                    onAction="#handleAddExercise"
+                    maxWidth="250"/>
+
+
+            <Separator/>
+
+
+            <!-- ========================= -->
+            <!-- BACK                       -->
+            <!-- ========================= -->
+
+            <Button text="Back to Menu"
+                    onAction="#handleBackToMenu"/>
+
+        </VBox>
+
+
+        <!-- ================================================= -->
+        <!-- RIGHT SIDE - PLAN OVERVIEW                        -->
+        <!-- ================================================= -->
+
+        <VBox spacing="10"
+              prefWidth="420"
+              maxWidth="420"
+              maxHeight="700"
+              style="-fx-background-color: rgba(255,255,255,0.90);
+                     -fx-background-radius: 12;
+                     -fx-padding: 20;">
+
+            <Label text="Training Plan Overview"
+                   style="-fx-font-size: 18px;
+                          -fx-font-weight: bold;"/>
+
+
+            <!-- ========================= -->
+            <!-- PLAN INFORMATION            -->
+            <!-- ========================= -->
+
+            <VBox spacing="5">
+
+                <Label fx:id="overviewPlanName"
+                       text="No plan created"
+                       style="-fx-font-size: 16px;
+                              -fx-font-weight: bold;"/>
+
+                <Label fx:id="overviewDates"
+                       text="Start: - | End: -"/>
+
+            </VBox>
+
+
+            <Separator/>
+
+
+            <!-- ========================= -->
+            <!-- PLAN CONTENT                -->
+            <!-- ========================= -->
+
+            <ScrollPane fitToWidth="true"
+                        VBox.vgrow="ALWAYS"
+                        style="-fx-background-color: transparent;">
+
+                <VBox fx:id="overviewContainer"
+                      spacing="12"
+                      style="-fx-padding: 5;"/>
+
+            </ScrollPane>
+
+
+            <Separator/>
+
+
+            <!-- ========================= -->
+            <!-- TOTALS                      -->
+            <!-- ========================= -->
+
+            <VBox spacing="4">
+
+                <Label fx:id="overviewDuration"
+                       text="Total duration: 0 min"/>
+
+                <Label fx:id="overviewCalories"
+                       text="Total calories: 0"/>
+
+            </VBox>
+
+        </VBox>
+
+    </HBox>
 
 </StackPane>
