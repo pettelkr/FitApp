@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.fitapp.controller.ExerciseController"
+           alignment="CENTER">
+
+    <!-- Background image -->
+    <ImageView fitWidth="800"
+               fitHeight="800"
+               preserveRatio="false"
+               opacity="0.9">
+        <image>
+            <Image url="@/images/trainingsplan_gross.png"/>
+        </image>
+    </ImageView>
+
+    <VBox spacing="10"
+          alignment="CENTER"
+          maxWidth="320"
+          style="-fx-background-color: rgba(255,255,255,0.85);
+                 -fx-background-radius: 12;
+                 -fx-padding: 25;">
+
+        <Label text="Create Exercise"
+               style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+        <!-- General information -->
+
+        <TextField fx:id="exerciseNameField"
+                   promptText="Exercise name"/>
+
+        <ComboBox fx:id="exerciseCategory"
+                  promptText="Select exercise category"
+                  maxWidth="Infinity"/>
+
+        <TextField fx:id="exerciseCaloriesField"
+                   promptText="Calories per hour"/>
+
+        <TextField fx:id="exerciseDurationField"
+                   promptText="Duration in minutes"/>
+
+        <TextField fx:id="exerciseDifficultyField"
+                   promptText="Difficulty"/>
+
+
+        <!-- Weight Exercise -->
+
+        <VBox fx:id="weightFields"
+              spacing="8"
+              managed="false"
+              visible="false">
+
+            <TextField fx:id="exerciseWeightField"
+                       promptText="Weight (kg)"/>
+
+            <TextField fx:id="exerciseRepetitionField"
+                       promptText="Repetitions"/>
+
+            <TextField fx:id="exerciseMuscleGroupField"
+                       promptText="Muscle group"/>
+
+        </VBox>
+
+
+        <!-- Running Exercise -->
+
+        <VBox fx:id="runningFields"
+              spacing="8"
+              managed="false"
+              visible="false">
+
+            <TextField fx:id="exerciseDistanceField"
+                       promptText="Distance (km)"/>
+
+            <TextField fx:id="exerciseSpeedField"
+                       promptText="Speed (km/h)"/>
+
+            <TextField fx:id="exerciseStepsField"
+                       promptText="Steps"/>
+
+        </VBox>
+
+
+        <!-- Calisthenics Exercise -->
+
+        <VBox fx:id="calisthenicsFields"
+              spacing="8"
+              managed="false"
+              visible="false">
+
+            <TextField fx:id="exerciseIntervalField"
+                       promptText="Interval (minutes)"/>
+
+            <TextField fx:id="exerciseExercisesPerRoundField"
+                       promptText="Exercises per round"/>
+
+            <TextField fx:id="exerciseRoundsField"
+                       promptText="Number of rounds"/>
+
+        </VBox>
+
+
+        <Button text="Add Exercise"
+                onAction="#handleCreateExercise"
+                maxWidth="200"/>
+
+        <Separator/>
+
+        <Button text="Back to Menu"
+                onAction="#handleBackToMenu"/>
+
+    </VBox>
+
+</StackPane>
