@@ -149,6 +149,9 @@ public class DatabaseManager {
             );
             stmt.execute("Alter table users add column if not exists daily_calorie_goal integer Default 2000" );
             stmt.execute("UPDATE users set daily_calorie_goal = 2000 where daily_calorie_goal is null" );
+            stmt.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS daily_step_goal INTEGER DEFAULT 10000");
+            stmt.execute("UPDATE users SET daily_step_goal = 10000 WHERE daily_step_goal IS NULL");
+            stmt.execute("ALTER TABLE exercises ADD COLUMN IF NOT EXISTS calories_burned DOUBLE PRECISION DEFAULT 0");
             seedDefaultUsers(stmt);
         }
     }

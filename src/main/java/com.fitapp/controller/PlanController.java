@@ -451,8 +451,14 @@ public class PlanController implements Controller {
         // Get all created exercises
         // ---------------------------------------------
 
-        List<Exercise> allExercises =
-                exerciseService.getAllExercises();
+        List<Exercise> allExercises;
+        try {
+            allExercises = exerciseService.getAllExercises(Session.getUserId());
+        } catch (java.sql.SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Database error",
+                    "Exercises could not be loaded.");
+            return;
+        }
 
 
         List<Exercise> filteredExercises =

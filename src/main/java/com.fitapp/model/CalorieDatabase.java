@@ -28,7 +28,7 @@ public class CalorieDatabase implements CalorieRepository {
 
     @Override
     public int getBurnedToday(int userId, LocalDate date) throws SQLException {
-        return queryInt("SELECT SUM(calories) FROM exercises WHERE user_id = ? AND date = ?",
+        return queryInt("SELECT SUM(calories_burned) FROM exercises WHERE user_id = ? AND date = ?",
                 userId, date);
     }
 
