@@ -47,10 +47,10 @@
                 style="-fx-font-size: 14px;"
                 onAction="#handleMakePlan" />
 
-        <Button text="View Statistics"
+        <Button text="StepCounter Statistik"
                 maxWidth="Infinity"
-                style="-fx-font-size: 14px;"/>
-        <!--                onAction="#handleViewStatistics" />-->
+                style="-fx-font-size: 14px;"
+                onAction="#handleViewStatistics" />
 
         <Button text="Step Counter"
                 maxWidth="Infinity"
