@@ -5,11 +5,12 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
+<!-- Christian: Layout der Step-Counter-Seite (3 Spalten). Controller: StepCounterController. -->
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.fitapp.controller.StepCounterController">
 
-    <!-- Hintergrundbild, breit fuer drei Spalten -->
+    <!-- Christian: breites Hintergrundbild fuer drei Spalten. -->
     <ImageView fitWidth="1000"
                fitHeight="720"
                preserveRatio="false"
@@ -19,10 +20,10 @@
         </image>
     </ImageView>
 
-    <!-- drei Karten nebeneinander -->
+    <!-- Christian: drei Karten nebeneinander. -->
     <HBox spacing="16" alignment="CENTER" style="-fx-padding: 12;">
 
-        <!-- ============ LINKS: Schrittzahlrechner ============ -->
+        <!-- Christian: LINKS - Schrittzahlrechner. -->
         <VBox spacing="5"
               alignment="TOP_LEFT"
               prefWidth="300"
@@ -31,7 +32,7 @@
                      -fx-background-radius: 12;
                      -fx-padding: 16;">
 
-            <!-- angemeldeter Benutzer: oben links -->
+            <!-- Christian: angemeldeter Benutzer, oben links. -->
             <Label fx:id="userNameLabel" style="-fx-font-weight: bold;" />
 
             <Label text="Schrittzahlrechner"
@@ -71,7 +72,7 @@
             <Label text="schwer  (ca. 100 kg):  550 - 615 kcal" />
         </VBox>
 
-        <!-- ============ MITTE: Schritte eintragen ============ -->
+        <!-- Christian: MITTE - Schritte eintragen. -->
         <VBox spacing="8"
               alignment="TOP_LEFT"
               prefWidth="300"
@@ -97,12 +98,12 @@
             <TextField fx:id="erreichteSchritteField"
                        promptText="z. B. 8500" maxWidth="Infinity" />
 
-            <!-- speichert und ueberschreibt einen vorhandenen Eintrag des Tages -->
+            <!-- Christian: speichern, ersetzt den Eintrag des Tages. -->
             <Button text="Schritte speichern (ueberschreibt den Tag)"
                     maxWidth="Infinity"
                     onAction="#handleSaveSteps" />
 
-            <!-- loescht den gespeicherten Eintrag fuer das gewaehlte Datum -->
+            <!-- Christian: Eintrag fuer das Datum loeschen. -->
             <Button text="Tag zuruecksetzen"
                     maxWidth="Infinity"
                     onAction="#handleResetTag" />
@@ -110,7 +111,7 @@
             <Label fx:id="saveInfoLabel" wrapText="true" />
         </VBox>
 
-        <!-- ============ RECHTS: Uebersicht der Schritte ============ -->
+        <!-- Christian: RECHTS - Monatsuebersicht der Schritte. -->
         <VBox spacing="8"
               alignment="TOP_LEFT"
               prefWidth="330"
@@ -137,7 +138,7 @@
 
             <Separator />
 
-            <!-- unten rechts: zurueck ins Hauptmenue -->
+            <!-- Christian: zurueck ins Hauptmenue. -->
             <Button text="Zurueck zum Menue"
                     maxWidth="Infinity"
                     onAction="#handleBackToMenu" />

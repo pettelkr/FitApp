@@ -3,10 +3,8 @@ package com.fitapp.model;
 import java.time.LocalDate;
 
 /**
- * Ein einzelner Schritt-Eintrag aus dem Step Counter.
- *
- * Steht fuer eine Zeile in der Datei "steps.csv":
- * wer, an welchem Tag, wie viele Schritte, welches Tagesziel.
+ * Christian: Eine Zeile aus steps.csv.
+ * Wer, welcher Tag, wie viele Schritte, welches Tagesziel.
  */
 public class StepEntry {
 
@@ -15,6 +13,7 @@ public class StepEntry {
     public int schritte;
     public int ziel;
 
+    // Christian: Werte beim Erzeugen setzen.
     public StepEntry(String username, LocalDate datum, int schritte, int ziel) {
         this.username = username;
         this.datum = datum;

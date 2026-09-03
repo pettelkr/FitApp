@@ -70,8 +70,7 @@ public class LoginController implements Controller {
             userDB.validateInput(usernameField.getText(), passwordField.getText());
             errorLabel.setVisible(false);
 
-            // Wer sich angemeldet hat, merken - der Step Counter und die
-            // Statistik brauchen den Namen.
+            // Christian: Name vom Login merken. Step Counter und Statistik brauchen ihn.
             Session.setUser(usernameField.getText());
 
             changeView("mainMenu.fxml");

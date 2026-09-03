@@ -18,14 +18,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 /**
- * Step-Counter-Seite mit drei Bereichen:
- *
- *  LINKS  - Schrittzahlrechner: aus Gewicht und Zeitraum (Start-/Enddatum)
- *           das noetige taegliche Schrittziel (Soll) berechnen.
- *  MITTE  - Schritte eintragen: fuer einen Tag die erreichten
- *           Schritte (Ist) speichern.
- *  RECHTS - Uebersicht der Schritte: ein ganzer Monat, Soll gegen Ist.
- *           Der Monat ist auswaehlbar.
+ * Christian: Step-Counter-Seite mit drei Spalten.
+ * LINKS  - Rechner: aus Gewicht und Zeitraum das noetige Tagesziel (Soll).
+ * MITTE  - Schritte fuer einen Tag eintragen (Ist).
+ * RECHTS - Monatsuebersicht: Soll gegen Ist, Monat waehlbar.
  */
 public class StepCounterController implements Controller {
 
@@ -41,50 +37,44 @@ public class StepCounterController implements Controller {
         navigator.changeView(fxmlFile);
     }
 
-    // Zuletzt berechnetes Schrittziel (Soll). 0 = noch nicht berechnet.
+    // Christian: zuletzt berechnetes Schrittziel. 0 = noch nicht berechnet.
     private long sollSchritte = 0;
 
-    // -------------------------
-    // FXML - Schrittzahlrechner (links)
-    // -------------------------
-    @FXML private Label userNameLabel;          // oben links: angemeldeter Benutzer
+    // Christian: Felder der linken Spalte (Rechner).
+    @FXML private Label userNameLabel;
     @FXML private TextField currentWeightField;
     @FXML private TextField targetWeightField;
     @FXML private DatePicker startDatePicker;
     @FXML private DatePicker endDatePicker;
-    @FXML private Label tageLabel;              // Anzahl der Tage im Zeitraum
-    @FXML private Label calcResultLabel;        // noetige Schritte pro Tag
+    @FXML private Label tageLabel;
+    @FXML private Label calcResultLabel;
 
-    // -------------------------
-    // FXML - Schritte eintragen (mitte)
-    // -------------------------
+    // Christian: Felder der mittleren Spalte (Eintragen).
     @FXML private DatePicker datumPicker;
     @FXML private Label sollLabel;
     @FXML private TextField erreichteSchritteField;
     @FXML private Label saveInfoLabel;
 
-    // -------------------------
-    // FXML - Uebersicht (rechts)
-    // -------------------------
+    // Christian: Felder der rechten Spalte (Uebersicht).
     @FXML private Label uebersichtBenutzerLabel;
     @FXML private ComboBox<String> monatBox;
     @FXML private VBox uebersichtBox;
     @FXML private Label uebersichtSummeLabel;
 
-    // Wird nach dem Laden des FXML automatisch aufgerufen.
+    // Christian: laeuft automatisch nach dem Laden der FXML.
     @FXML
     public void initialize() {
         userNameLabel.setText("Angemeldet: " + Session.getUser());
         uebersichtBenutzerLabel.setText("Benutzer: " + Session.getUser());
 
-        // Datumsfelder vorbelegen
+        // Christian: Datumsfelder auf heute setzen.
         startDatePicker.setValue(LocalDate.now());
         datumPicker.setValue(LocalDate.now());
 
         sollLabel.setText("noch nicht berechnet");
         tageLabel.setText("0 Tage");
 
-        // Monatsauswahl: die letzten 12 Monate, aktueller Monat vorausgewaehlt
+        // Christian: letzte 12 Monate in die Auswahl.
         YearMonth jetzt = YearMonth.now();
         for (int i = 0; i < 12; i++) {
             monatBox.getItems().add(jetzt.minusMonths(i).toString());
@@ -95,13 +85,13 @@ public class StepCounterController implements Controller {
         aktualisiereUebersicht();
     }
 
-    // Datum in der Mitte gewechselt -> gespeicherte Schritte fuer den Tag ins Feld.
+    // Christian: Datum in der Mitte gewechselt -> gespeicherte Schritte anzeigen.
     @FXML
     public void handleTagWechsel() {
         zeigeTag();
     }
 
-    // Einen Tag weiterspringen.
+    // Christian: einen Tag weiter springen.
     @FXML
     public void handleNextDay() {
         LocalDate aktuell = datumPicker.getValue();
@@ -112,8 +102,7 @@ public class StepCounterController implements Controller {
         zeigeTag();
     }
 
-    // Holt die gespeicherten Schritte fuer das gewaehlte Datum ins Feld
-    // (leer, wenn fuer den Tag noch nichts gespeichert ist).
+    // Christian: gespeicherte Schritte fuer das Datum ins Feld holen (sonst leer).
     private void zeigeTag() {
         LocalDate datum = datumPicker.getValue();
         if (datum == null) {
@@ -127,7 +116,7 @@ public class StepCounterController implements Controller {
         }
     }
 
-    // Start- oder Enddatum geaendert -> Anzahl der Tage neu anzeigen.
+    // Christian: Start- oder Enddatum geaendert -> Anzahl Tage anzeigen.
     @FXML
     public void handleDatumWechsel() {
         LocalDate start = startDatePicker.getValue();
@@ -138,9 +127,7 @@ public class StepCounterController implements Controller {
         }
     }
 
-    // =========================================================
-    // LINKS: Schrittziel berechnen
-    // =========================================================
+    // Christian: LINKS - noetiges Schrittziel berechnen.
     @FXML
     public void handleCalcSteps() {
         try {
@@ -157,7 +144,7 @@ public class StepCounterController implements Controller {
             long tage = ChronoUnit.DAYS.between(start, ende);
             tageLabel.setText(tage + " Tage");
 
-            double abzunehmen = aktuell - wunsch; // in kg
+            double abzunehmen = aktuell - wunsch; // kg
 
             if (abzunehmen <= 0 || tage <= 0) {
                 calcResultLabel.setText(
@@ -166,15 +153,14 @@ public class StepCounterController implements Controller {
                 return;
             }
 
-            // 1 kg Koerperfett entspricht ungefaehr 7000 kcal.
+            // Christian: 1 kg Fett = ca. 7000 kcal.
             double gesamtDefizit = abzunehmen * 7000.0;
 
-            // wie viel kcal muessen pro Tag zusaetzlich verbrannt werden
+            // Christian: noetiges Defizit pro Tag.
             double defizitProTag = gesamtDefizit / tage;
 
-            // Orientierung: pro 10.000 Schritte verbrennt man etwa
-            // (Koerpergewicht in kg) * 5,8 kcal.
-            //   60 kg -> ca. 348 kcal ; 80 kg -> ca. 464 ; 100 kg -> ca. 580
+            // Christian: kcal pro Schritt, grob aus dem Gewicht.
+            // 10.000 Schritte ~ Gewicht * 5,8 kcal.
             double kcalProSchritt = aktuell * 5.8 / 10000.0;
 
             sollSchritte = Math.round(defizitProTag / kcalProSchritt);
@@ -188,9 +174,7 @@ public class StepCounterController implements Controller {
         }
     }
 
-    // =========================================================
-    // MITTE: erreichte Schritte fuer einen Tag speichern
-    // =========================================================
+    // Christian: MITTE - erreichte Schritte fuer einen Tag speichern.
     @FXML
     public void handleSaveSteps() {
         try {
@@ -207,8 +191,7 @@ public class StepCounterController implements Controller {
                 return;
             }
 
-            // In steps.csv speichern und einen vorhandenen Eintrag
-            // fuer denselben Tag UEBERSCHREIBEN.
+            // Christian: in steps.csv speichern, Eintrag vom selben Tag wird ersetzt.
             StepCsv.saveOrReplace(new StepEntry(
                     Session.getUser(),
                     datum,
@@ -225,7 +208,7 @@ public class StepCounterController implements Controller {
         }
     }
 
-    // Reset: den gespeicherten Eintrag fuer das gewaehlte Datum loeschen.
+    // Christian: Eintrag fuer das gewaehlte Datum loeschen.
     @FXML
     public void handleResetTag() {
         LocalDate datum = datumPicker.getValue();
@@ -239,15 +222,13 @@ public class StepCounterController implements Controller {
         aktualisiereUebersicht();
     }
 
-    // anderer Monat gewaehlt -> Uebersicht neu aufbauen
+    // Christian: anderer Monat gewaehlt -> Uebersicht neu aufbauen.
     @FXML
     public void handleMonatWechsel() {
         aktualisiereUebersicht();
     }
 
-    // =========================================================
-    // RECHTS: Uebersicht des gewaehlten Monats (Soll / Ist)
-    // =========================================================
+    // Christian: RECHTS - Monatsuebersicht Soll gegen Ist aufbauen.
     private void aktualisiereUebersicht() {
         String user = Session.getUser();
         List<StepEntry> alle = StepCsv.readAll();
@@ -263,7 +244,7 @@ public class StepCounterController implements Controller {
         long summeSoll = 0;
         long summeIst = 0;
 
-        // jeden Tag des Monats durchgehen
+        // Christian: jeden Tag des Monats durchgehen.
         for (int tagNr = 1; tagNr <= monat.lengthOfMonth(); tagNr++) {
             LocalDate tag = monat.atDay(tagNr);
 
@@ -277,7 +258,7 @@ public class StepCounterController implements Controller {
                 }
             }
 
-            // Soll aus der aktuellen Berechnung; sonst das gespeicherte Soll.
+            // Christian: Soll aus der Berechnung, sonst das gespeicherte Soll.
             long soll = (sollSchritte > 0) ? sollSchritte : gespeichertesSoll;
 
             summeSoll += soll;
@@ -293,6 +274,7 @@ public class StepCounterController implements Controller {
                 + "    Ist: " + summeIst);
     }
 
+    // Christian: zurueck ins Hauptmenue.
     @FXML
     public void handleBackToMenu(ActionEvent event) {
         changeView("mainMenu.fxml");

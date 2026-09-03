@@ -47,6 +47,7 @@
                 style="-fx-font-size: 14px;"
                 onAction="#handleMakePlan" />
 
+        <!-- Christian: Button zur StepCounter-Statistik (vorher "View Statistics", ohne Funktion). -->
         <Button text="StepCounter Statistik"
                 maxWidth="Infinity"
                 style="-fx-font-size: 14px;"

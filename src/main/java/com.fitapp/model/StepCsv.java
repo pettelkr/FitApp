@@ -13,38 +13,29 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Speichert Schritt-Eintraege in einer einfachen Textdatei "steps.csv"
- * und liest sie wieder ein.
- *
- * Aufbau einer Zeile (durch Kommas getrennt):
- *   username,datum,schritte,ziel
- * Beispiel:
- *   Rene,2026-09-01,3500,10000
- *
- * Die Datei liegt bei "users.csv" unter src/main/resources/data/.
- * Hinweis: Das funktioniert, solange die App aus dem Projektordner
- * gestartet wird (mvn javafx:run / IntelliJ). Aus einer fertigen .jar
- * heraus waere der Ordner schreibgeschuetzt.
+ * Christian: Liest und schreibt die Datei steps.csv.
+ * Eine Zeile: username,datum,schritte,ziel
+ * Beispiel:   Rene,2026-09-01,3500,10000
+ * Die Datei liegt neben users.csv in src/main/resources/data/.
  */
 public class StepCsv {
 
-    // Datei im Projekt, neben users.csv.
+    // Christian: Pfad zur Datei.
     private static final File DATEI =
             new File("src/main/resources/data/steps.csv");
 
-    // Laeuft EINMAL, wenn die Klasse zuerst benutzt wird:
-    // legt Beispieldaten an, falls es die Datei noch nicht gibt.
+    // Christian: Beim ersten Benutzen Beispieldaten anlegen, falls die Datei fehlt.
     static {
         if (!DATEI.exists()) {
             seedDemo();
         }
     }
 
-    // --- Schreiben ---
+    // ----- Schreiben -----
 
-    // Haengt einen Eintrag ans Ende der Datei an.
+    // Christian: Eine Zeile hinten anhaengen.
     public static void append(StepEntry e) {
-        // Das zweite Argument "true" heisst: anhaengen statt ueberschreiben.
+        // Christian: "true" = anhaengen statt ueberschreiben.
         try (BufferedWriter w = new BufferedWriter(new FileWriter(DATEI, true))) {
             w.write(e.username + "," + e.datum + "," + e.schritte + "," + e.ziel);
             w.newLine();
@@ -53,25 +44,24 @@ public class StepCsv {
         }
     }
 
-    // Speichert den Eintrag fuer Benutzer + Datum und UEBERSCHREIBT dabei
-    // einen vorhandenen Eintrag desselben Tages.
+    // Christian: Tag speichern. Alter Eintrag vom selben Tag wird ersetzt.
     public static void saveOrReplace(StepEntry neu) {
         List<StepEntry> alle = readAll();
-        // alten Eintrag fuer denselben Benutzer am selben Tag entfernen
+        // Christian: alten Eintrag (gleicher Benutzer, gleicher Tag) entfernen.
         alle.removeIf(e -> e.username.equals(neu.username)
                 && e.datum.equals(neu.datum));
         alle.add(neu);
         schreibeAlle(alle);
     }
 
-    // Loescht den Eintrag fuer Benutzer + Datum (Reset fuer einen Tag).
+    // Christian: Eintrag fuer einen Tag loeschen.
     public static void delete(String username, LocalDate datum) {
         List<StepEntry> alle = readAll();
         alle.removeIf(e -> e.username.equals(username) && e.datum.equals(datum));
         schreibeAlle(alle);
     }
 
-    // Erreichte Schritte fuer Benutzer + Datum (0, wenn nichts gespeichert ist).
+    // Christian: Schritte von einem Benutzer an einem Tag. 0 = nichts gespeichert.
     public static int schritteFuer(String username, LocalDate datum) {
         int summe = 0;
         for (StepEntry e : readAll()) {
@@ -82,8 +72,7 @@ public class StepCsv {
         return summe;
     }
 
-    // Schreibt die komplette Liste neu in die Datei (ueberschreibt alles).
-    // Nach Datum sortiert, damit die Datei ordentlich bleibt.
+    // Christian: Ganze Liste neu schreiben, sortiert nach Datum.
     private static void schreibeAlle(List<StepEntry> liste) {
         liste.sort((a, b) -> a.datum.compareTo(b.datum));
         try (BufferedWriter w = new BufferedWriter(new FileWriter(DATEI, false))) {
@@ -96,28 +85,32 @@ public class StepCsv {
         }
     }
 
-    // --- Lesen ---
+    // ----- Lesen -----
 
-    // Liest alle Eintraege aus der Datei in eine Liste.
+    // Christian: Alle Zeilen der Datei in eine Liste lesen.
     public static List<StepEntry> readAll() {
         List<StepEntry> liste = new ArrayList<>();
 
+        // Christian: keine Datei -> leere Liste.
         if (!DATEI.exists()) {
-            return liste; // noch keine Datei -> leere Liste
+            return liste;
         }
 
         try (BufferedReader r = new BufferedReader(new FileReader(DATEI))) {
             String zeile;
             while ((zeile = r.readLine()) != null) {
 
+                // Christian: leere Zeile ueberspringen.
                 if (zeile.isBlank()) {
-                    continue; // Leerzeile ueberspringen
+                    continue;
                 }
 
-                // Zeile an den Kommas zerlegen: [username, datum, schritte, ziel]
+                // Christian: an den Kommas trennen: username, datum, schritte, ziel.
                 String[] teile = zeile.split(",");
+
+                // Christian: kaputte Zeile ueberspringen.
                 if (teile.length < 4) {
-                    continue; // kaputte Zeile ueberspringen
+                    continue;
                 }
 
                 liste.add(new StepEntry(
@@ -127,24 +120,23 @@ public class StepCsv {
                         Integer.parseInt(teile[3].trim())));
             }
         } catch (IOException | RuntimeException ex) {
-            // RuntimeException faengt z. B. eine falsch geschriebene Zahl ab
+            // Christian: faengt auch eine falsch geschriebene Zahl ab.
             ex.printStackTrace();
         }
 
         return liste;
     }
 
-    // Alle verschiedenen Benutzernamen, die in der Datei vorkommen.
+    // Christian: Alle Benutzernamen aus der Datei, ohne Doppelte.
     public static List<String> alleBenutzer() {
-        Set<String> namen = new LinkedHashSet<>(); // ohne Doppelte, in Reihenfolge
+        Set<String> namen = new LinkedHashSet<>();
         for (StepEntry e : readAll()) {
             namen.add(e.username);
         }
         return new ArrayList<>(namen);
     }
 
-    // --- Beispieldaten (nur beim ersten Start) ---
-    // 14 Tage fuer drei Benutzer, damit man sofort etwas sieht.
+    // Christian: Beispieldaten - 3 Benutzer, je 14 Tage. Nur beim ersten Start.
     private static void seedDemo() {
         String[] benutzer = {"Rene", "Hasan", "John"};
         int[] ziele = {10000, 12000, 8000};

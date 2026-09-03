@@ -13,11 +13,9 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 
 /**
- * StepCounter-Statistik.
- *
- * Man waehlt einen Monat. Das Balkendiagramm zeigt fuer jeden Tag
- * dieses Monats die erreichten Schritte des angemeldeten Benutzers.
- * Die Zahlen kommen aus steps.csv (ueber die Klasse Statistic).
+ * Christian: Seite "StepCounter Statistik".
+ * Man waehlt einen Monat. Das Balkendiagramm zeigt pro Tag die
+ * erreichten Schritte des angemeldeten Benutzers (aus steps.csv).
  */
 public class StatisticsController implements Controller {
 
@@ -33,35 +31,35 @@ public class StatisticsController implements Controller {
         navigator.changeView(fxmlFile);
     }
 
-    // --- Elemente aus dem FXML ---
+    // Christian: Elemente aus der FXML-Datei.
     @FXML private Label userNameLabel;
     @FXML private ComboBox<String> monatBox;
     @FXML private BarChart<String, Number> chart;
 
-    // Wird nach dem Laden des FXML automatisch aufgerufen.
+    // Christian: laeuft automatisch nach dem Laden der FXML.
     @FXML
     public void initialize() {
 
-        // angemeldeten Benutzer anzeigen
+        // Christian: angemeldeten Benutzer anzeigen.
         userNameLabel.setText("Angemeldet: " + Session.getUser());
 
-        // Monatsauswahl: die letzten 12 Monate, aktueller Monat vorausgewaehlt
+        // Christian: letzte 12 Monate in die Auswahl, aktueller Monat vorne.
         YearMonth jetzt = YearMonth.now();
         for (int i = 0; i < 12; i++) {
-            monatBox.getItems().add(jetzt.minusMonths(i).toString()); // z. B. "2026-09"
+            monatBox.getItems().add(jetzt.minusMonths(i).toString());
         }
         monatBox.setValue(jetzt.toString());
 
         zeichneDiagramm();
     }
 
-    // anderer Monat gewaehlt -> Diagramm neu zeichnen
+    // Christian: anderer Monat gewaehlt -> Diagramm neu zeichnen.
     @FXML
     public void handleMonatWechsel() {
         zeichneDiagramm();
     }
 
-    // Balkendiagramm fuellen: ein Balken pro Tag des gewaehlten Monats.
+    // Christian: Balkendiagramm fuellen - ein Balken pro Tag des Monats.
     private void zeichneDiagramm() {
 
         String monatText = monatBox.getValue();
@@ -70,13 +68,13 @@ public class StatisticsController implements Controller {
         }
         YearMonth monat = YearMonth.parse(monatText);
 
-        // Statistic wertet steps.csv fuer diesen Benutzer und Monat aus
+        // Christian: Statistic wertet steps.csv fuer Benutzer und Monat aus.
         Statistic s = new Statistic(
                 Session.getUser(),
                 monat.atDay(1),
                 monat.atDay(monat.lengthOfMonth()));
 
-        // eine Datenreihe: Tag -> erreichte Schritte
+        // Christian: eine Datenreihe - Tag -> erreichte Schritte.
         XYChart.Series<String, Number> serie = new XYChart.Series<>();
         serie.setName("Erreichte Schritte");
 
@@ -86,11 +84,12 @@ public class StatisticsController implements Controller {
             serie.getData().add(new XYChart.Data<>(String.valueOf(tagNr), schritte));
         }
 
-        // altes Diagramm ersetzen
+        // Christian: altes Diagramm loeschen, neues setzen.
         chart.getData().clear();
         chart.getData().add(serie);
     }
 
+    // Christian: zurueck ins Hauptmenue.
     @FXML
     public void handleBackToMenu() {
         changeView("mainMenu.fxml");

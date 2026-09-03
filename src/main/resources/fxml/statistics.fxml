@@ -6,11 +6,12 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
+<!-- Christian: Layout der Seite "StepCounter Statistik". Controller: StatisticsController. -->
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.fitapp.controller.StatisticsController">
 
-    <!-- gleicher Hintergrund wie der Step Counter -->
+    <!-- Christian: Hintergrundbild wie beim Step Counter. -->
     <ImageView fitWidth="900"
                fitHeight="620"
                preserveRatio="false"
@@ -20,7 +21,7 @@
         </image>
     </ImageView>
 
-    <!-- weisse Karte mit Diagramm -->
+    <!-- Christian: weisse Karte mit dem Diagramm. -->
     <VBox spacing="10"
           alignment="TOP_CENTER"
           maxWidth="780"
@@ -32,7 +33,7 @@
         <Label text="StepCounter Statistik"
                style="-fx-font-size: 20px; -fx-font-weight: bold;" />
 
-        <!-- angemeldeter Benutzer -->
+        <!-- Christian: angemeldeter Benutzer. -->
         <Label fx:id="userNameLabel" style="-fx-font-weight: bold;" />
 
         <HBox spacing="8" alignment="CENTER_LEFT">
@@ -40,7 +41,7 @@
             <ComboBox fx:id="monatBox" onAction="#handleMonatWechsel" />
         </HBox>
 
-        <!-- Balkendiagramm: pro Tag des Monats die erreichten Schritte -->
+        <!-- Christian: Balkendiagramm - pro Tag die erreichten Schritte. -->
         <BarChart fx:id="chart" legendVisible="false" VBox.vgrow="ALWAYS">
             <xAxis>
                 <CategoryAxis fx:id="xAxis" label="Tag im Monat" />
