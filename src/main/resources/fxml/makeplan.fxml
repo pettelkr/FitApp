@@ -234,6 +234,13 @@
                       maxWidth="Infinity"
                       onAction="#handlePlanSelection"/>
 
+            <Button text="Delete selected plan"
+                    onAction="#handleDeletePlan"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #e74c3c;
+               -fx-text-fill: white;
+               -fx-font-weight: bold;"/>
+
         </VBox>
 
     </HBox>

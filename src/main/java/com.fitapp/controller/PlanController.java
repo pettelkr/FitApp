@@ -278,7 +278,7 @@ public class PlanController implements Controller {
 
                         if (empty || plan == null) {
 
-                            setText(null);
+                            setText("no plan available");
 
                         } else {
 
@@ -287,6 +287,7 @@ public class PlanController implements Controller {
                     }
                 }
         );
+
 
 
         // ---------------------------------------------
@@ -1595,6 +1596,154 @@ public class PlanController implements Controller {
 
 
         alert.showAndWait();
+    }
+// =====================================================
+// DELETE CURRENT PLAN
+// =====================================================
+
+    @FXML
+    public void handleDeletePlan() {
+
+        // ---------------------------------------------
+        // Prüfen, ob ein Plan ausgewählt ist
+        // ---------------------------------------------
+
+        if (currentPlan == null) {
+
+            showAlert(
+                    Alert.AlertType.WARNING,
+                    "No plan",
+                    "Please select a training plan first."
+            );
+
+            return;
+        }
+
+
+        // ---------------------------------------------
+        // Sicherheitsabfrage
+        // ---------------------------------------------
+
+        Alert confirmation =
+                new Alert(Alert.AlertType.CONFIRMATION);
+
+        confirmation.setTitle("Delete Training Plan");
+        confirmation.setHeaderText(
+                "Delete plan \"" + currentPlan.getName() + "\"?"
+        );
+
+        confirmation.setContentText(
+                "This will delete the selected training plan."
+        );
+
+
+        // ---------------------------------------------
+        // Abfrage anzeigen
+        // ---------------------------------------------
+
+        var result =
+                confirmation.showAndWait();
+
+
+        if (result.isEmpty()
+                || result.get()
+                != javafx.scene.control.ButtonType.OK) {
+
+            return;
+        }
+
+
+        // ---------------------------------------------
+        // Plan merken
+        // ---------------------------------------------
+
+        Plan deletedPlan = currentPlan;
+
+
+        // ---------------------------------------------
+        // Plan aus Liste entfernen
+        // ---------------------------------------------
+
+        plans.remove(deletedPlan);
+
+
+        // ---------------------------------------------
+        // Aktuellen Plan zurücksetzen
+        // ---------------------------------------------
+
+        currentPlan = null;
+
+
+        // ---------------------------------------------
+        // Plan-Auswahl aktualisieren
+        // ---------------------------------------------
+
+        refreshPlanSelector();
+
+
+        // ---------------------------------------------
+        // Auswahl zurücksetzen
+        // ---------------------------------------------
+
+        planSelector.getSelectionModel()
+                .clearSelection();
+
+        planSelector.setValue(null);
+
+
+        // ---------------------------------------------
+        // Wenn noch Pläne vorhanden sind:
+        // ersten Plan auswählen
+        // ---------------------------------------------
+
+        if (!plans.isEmpty()) {
+
+            Plan nextPlan =
+                    plans.get(0);
+
+            currentPlan = nextPlan;
+
+            planSelector.setValue(nextPlan);
+
+            refreshDays();
+
+        } else {
+
+            // -----------------------------------------
+            // Keine Pläne mehr vorhanden
+            // -----------------------------------------
+
+            daySelector.setItems(
+                    FXCollections.observableArrayList()
+            );
+
+            exerciseBox.setItems(
+                    FXCollections.observableArrayList()
+            );
+
+            exerciseTypeBox.getSelectionModel()
+                    .clearSelection();
+        }
+
+
+        // ---------------------------------------------
+        // Übersicht aktualisieren
+        // ---------------------------------------------
+
+        updateOverview();
+
+
+        // ---------------------------------------------
+        // Meldung
+        // ---------------------------------------------
+
+        showAlert(
+                Alert.AlertType.INFORMATION,
+                "Plan deleted",
+                "Training plan \""
+                        + deletedPlan.getName()
+                        + "\" was deleted."
+        );
     }
 
 

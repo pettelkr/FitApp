@@ -41,6 +41,7 @@
 
         <Button text="Login"
                 maxWidth="Infinity"
+                defaultButton="true"
                 style="-fx-font-size: 14px;"
                 onAction="#handleLogin"/>
 
