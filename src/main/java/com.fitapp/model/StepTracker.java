@@ -13,10 +13,16 @@ public class StepTracker {
 
     public StepTracker(int dailyGoal) {
         this.dailyGoal = new SimpleIntegerProperty(dailyGoal);
-        this.remainingSteps = Bindings.createIntegerBinding(
-                () -> this.dailyGoal.get() - currentSteps.get(),
-                this.dailyGoal, currentSteps
-        );
+        this.remainingSteps =
+                Bindings.createIntegerBinding(
+                        () -> Math.max(
+                                0,
+                                this.dailyGoal.get() - currentSteps.get()
+                        ),
+                        this.dailyGoal,
+                        currentSteps
+                );
+
     }
 
     public void addSteps(int steps) {
