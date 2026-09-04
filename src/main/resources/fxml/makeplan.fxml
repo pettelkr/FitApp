@@ -225,7 +225,9 @@
             <!-- ========================= -->
 
             <Label text="Choose your plan:"
-                   style="-fx-font-weight: bold;"/>
+                   style="-fx-font-size: 14px;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: #333333;"/>
 
             <ComboBox fx:id="planSelector"
                       promptText="no plan available"
