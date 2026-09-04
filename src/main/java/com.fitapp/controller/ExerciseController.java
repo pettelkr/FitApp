@@ -9,7 +9,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import com.fitapp.util.BackgroundImageHelper;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+
+
 
 import java.util.Date;
 
@@ -27,6 +32,11 @@ public class ExerciseController implements Controller {
     // -------------------------
     // GENERAL FIELDS
     // -------------------------
+    @FXML
+    private StackPane rootPane;
+
+    @FXML
+    private ImageView backgroundImage;
 
     @FXML
     private TextField exerciseNameField;
@@ -117,6 +127,10 @@ public class ExerciseController implements Controller {
     @FXML
     public void initialize() {
 
+        BackgroundImageHelper.setup(
+                rootPane,
+                backgroundImage
+        );
         exerciseCategory.setItems(
                 FXCollections.observableArrayList(
                         "WEIGHT",

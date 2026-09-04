@@ -11,6 +11,10 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import com.fitapp.util.BackgroundImageHelper;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +54,13 @@ public class PlanController implements Controller {
             new ExerciseService();
 
     private Plan currentPlan;
+
+    //Fields
+    @FXML
+    private StackPane rootPane;
+
+    @FXML
+    private ImageView backgroundImage;
 
 
     // =====================================================
@@ -128,6 +139,11 @@ public class PlanController implements Controller {
 
     @FXML
     public void initialize() {
+
+        BackgroundImageHelper.setup(
+                rootPane,
+                backgroundImage
+        );
 
         // ---------------------------------------------
         // Exercise categories

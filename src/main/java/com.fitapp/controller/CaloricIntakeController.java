@@ -7,6 +7,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
+import com.fitapp.util.BackgroundImageHelper;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+
 
 import java.time.LocalDate;
 
@@ -36,6 +40,13 @@ public class CaloricIntakeController implements Controller {
     // -------------------------
     // FXML FIELDS
     // -------------------------
+
+    @FXML
+    private StackPane rootPane;
+
+    @FXML
+    private ImageView backgroundImage;
+
     @FXML
     private TextField goalField;
 
@@ -58,6 +69,11 @@ public class CaloricIntakeController implements Controller {
     @FXML
     public void initialize() {
         caloriesOverflowLabel.setVisible(false);
+
+        BackgroundImageHelper.setup(
+                rootPane,
+                backgroundImage
+        );
 
         if (!Session.isLoggedIn()) {
             showMessage("No user logged in.");

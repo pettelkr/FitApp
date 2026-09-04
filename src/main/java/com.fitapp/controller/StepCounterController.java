@@ -7,6 +7,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import com.fitapp.util.BackgroundImageHelper;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 
 import java.time.LocalDate;
 
@@ -38,6 +41,8 @@ public class StepCounterController implements Controller {
     // -------------------------
     // FXML FIELDS
     // -------------------------
+    @FXML private StackPane rootPane;
+    @FXML private ImageView backgroundImage;
     @FXML private TextField goalField;
     @FXML private TextField stepsField;
     @FXML private TextField remainingField;
@@ -46,6 +51,12 @@ public class StepCounterController implements Controller {
     /** Lädt Ziel und die heute schon gelaufenen Schritte aus der Datenbank. */
     @FXML
     public void initialize() {
+
+        BackgroundImageHelper.setup(
+                rootPane,
+                backgroundImage
+        );
+
         stepOverflowLabel.setVisible(false);
 
         if (!Session.isLoggedIn()) {
@@ -111,7 +122,7 @@ public class StepCounterController implements Controller {
 
             persist(() -> stepDB.setGoal(Session.getUserId(), goal),
                     "Could not save the goal.");
-//            goalField.setPromptText("Current goal: " + goal); //Ziel-Feld:dauerhaft den gespeicherten Wert anzeig
+//            goalField.setPromptText("Current goal: " + goal); //Ziel-Feld:dauerhaft den gespeicherten Wert anzeigen
 
         } catch (NumberFormatException e) {
             showMessage("Please enter a valid step goal.");
