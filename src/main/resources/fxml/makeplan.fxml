@@ -220,6 +220,18 @@
 
             </VBox>
 
+            <!-- ========================= -->
+            <!-- PLAN SWITCH BUTTON         -->
+            <!-- ========================= -->
+
+            <Label text="Choose your plan:"
+                   style="-fx-font-weight: bold;"/>
+
+            <ComboBox fx:id="planSelector"
+                      promptText="no plan available"
+                      maxWidth="Infinity"
+                      onAction="#handlePlanSelection"/>
+
         </VBox>
 
     </HBox>
